@@ -1,0 +1,16 @@
+.bg-factory-texture {
+  /* O caminho deve apontar para onde você salvou a imagem do robô */
+  background-image: url('/assets/imgShipOrder.png'); 
+  background-size: 60%; /* 'contain' funciona bem para esse desenho do robô */
+  background-position: center; /* Coloca o robô no canto inferior direito */
+  background-repeat: no-repeat;
+  background-color: #ffffff; /* Fundo branco solicitado */
+}
+
+/* Ajuste para telas menores (opcional) */
+@media (max-width: 768px) {
+  .bg-factory-texture {
+    background-size: 70%; 
+    background-position: center bottom;
+  }
+}

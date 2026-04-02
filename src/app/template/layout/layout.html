@@ -1,0 +1,75 @@
+<header class="fixed top-0 z-50 inset-x-0">
+    <div class="card">
+        <p-menubar [dt]="{ 
+            background: '#003865', 
+            backgroundColor: 'white',
+            borderColor: 'transparent',
+            borderRadius: '0px',
+            color: 'white'
+        }">
+            <ng-template #start>
+                <div class="rounded-lg outline outline-green-300/40 cursor-pointer">
+                    <p-button  icon="pi pi-bars" (onClick)="toggleAside()" [text]="true"/>
+                </div>
+                <img src="assets/Jabil_White_SkyBlueRGB.svg" alt="Logo" width="115" class="aspect-auton ml-6">
+            </ng-template>
+        </p-menubar>
+    </div>
+    
+     <div class="card">
+        <p-drawer  [(visible)]="activeAside" modal="false" [closable]="false" position="left" [style]="{width: '200px',heigth: 'full', border: 'none', top: '58px'}" 
+            [dt]="{
+                background: '#003865',
+                color: 'white',
+                content: {
+                    padding: '0px'  
+                }
+            }">
+    
+            <ng-template #header>
+                <span class="font-semibold text-2xl text-primary">Ship Order</span>  
+            </ng-template>
+    
+            <ng-template #content>
+                    <ul class="flex flex-col p-0 m-0">
+                        <a routerLink="/home" #rla="routerLinkActive" routerLinkActive>
+                            <li class="flex items-center p-3 transition-all duration-200 cursor-pointer text-white"
+                                [ngClass]="rla.isActive ? 'bg-green-500/30' : 'bg-green-500/10 hover:bg-green-500/30'">
+                                <i class="pi pi-home mr-2"></i>
+                                <span class="font-medium">Home</span>
+                            </li>
+                        </a>
+                        
+                        <a routerLink="/dashboard" #rlb="routerLinkActive" routerLinkActive>
+                            <li class="flex items-center p-3 transition-all duration-200 cursor-pointer text-white"
+                                [ngClass]="rlb.isActive ? 'bg-green-500/30' : 'bg-green-500/10 hover:bg-green-500/30'">
+                                <i class="pi pi-chart-bar mr-2"></i>
+                                <span class="font-medium">Dashboard</span>
+                            </li>
+                        </a>
+                    </ul>
+            </ng-template> 
+        </p-drawer>
+    </div>
+</header>
+
+<main 
+    [style.margin-left]="activeAside ? '200px' : '0px'" 
+    class="transition-all duration-200 mt-10 bg-gray-200/50 scroll-auto">
+    
+    <div class="py-5 px-1">
+        <router-outlet></router-outlet>
+    </div>
+</main>
+
+<footer 
+  [style.margin-left]="activeAside ? '200px' : '0px'" 
+  class="fixed bottom-0 inset-x-0   bg-white border-t border-gray-200/50 px-6 py-2 flex items-center justify-between transition-all duration-200  ease-in-out shadow-3xl"
+>
+    <div class="flex items-center space-x-4">
+        <img src="assets/Jabil_Blue + Sky Blue_RGB.svg" alt="Jabil Logo" class="h-3 w-auto opacity-90">
+        <span class="text-xs  text-gray-500 tracking-wider">
+            Todos os direitos reservados. <span class=" text-gray-400 font-light italic ml-2">v1.0.0</span>
+        </span>
+    </div>
+</footer>
