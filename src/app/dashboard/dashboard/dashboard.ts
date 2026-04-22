@@ -21,6 +21,9 @@ export class Dashboard {
     messageService = inject(MessageService);
     cdr = inject(ChangeDetectorRef);
 
+    items: MenuItem[] | undefined;
+    home: MenuItem | undefined;
+
     // Chart data
     labelFailData: any;
     labelFailDataPie: any;
@@ -30,8 +33,6 @@ export class Dashboard {
     basicOptions: any;
     packoutChartOptions: any;
 
-    items: MenuItem[] | undefined;
-    home: MenuItem | undefined;
 
     // Filtros
     dateSelected: string[] = [];
@@ -151,7 +152,7 @@ export class Dashboard {
                     this.quarentineTableData = data.serialNumber.map((serial, index) => {
                         return {
                             serial: serial,
-                            time: data.timePassed[index] // Pega o tempo no mesmo índice do serial
+                            time: data.timePassed[index] 
                         };
                     });
                 }

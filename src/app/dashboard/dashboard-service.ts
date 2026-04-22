@@ -110,7 +110,7 @@ export class DashboardService {
           timePassed.push(timeValue);
         });
         
-        console.log('Processed Serials:', serials); // Check agora no console
+        console.log('Processed Serials:', serials); 
         
         return {
           serialNumber: serials,

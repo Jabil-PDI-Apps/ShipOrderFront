@@ -9,178 +9,178 @@
 </header>
 
 
-    <div class="p-4">
-        <p-panel class="shadow-sm pt-5" [showHeader]="false">
-            <p-toast />
-            <form #dashboardForm="ngForm" (ngSubmit)="onSubmit(dashboardForm)">
-                <div class="flex flex-row flex-wrap justify-start gap-10">
-                    <p-panel class="shadow-md w-80 text-sm" header="Data">
-                            <div class="flex flex-col gap-2 shadow-sm">
-                                <p-datepicker 
-                                    name="rangeDates"
-                                    #dateModel="ngModel"
-                                    [(ngModel)]="rangeDates" 
-                                    selectionMode="range" 
-                                    [showIcon]="true" 
-                                    placeholder="Selecione as datas"
-                                    dateFormat="dd/mm/yy"
-                                    [showClear]="true"
-                                    [readonlyInput]="true"
-                                    [showButtonBar]="true"
-                                    pInputMask="99/99/9999"
-                                    size="small"
-                                    required>
-    
-                                    <ng-template #buttonbar let-todayCallback="todayCallback" let-clearCallback="clearCallback">
-                                        <div class="flex justify-end w-full">
-                                            <div class="flex gap-2">
-                                                <p-button size="small" label="Hoje" (click)="todayCallback($event)" variant="outlined" />
-                                                <p-button size="small" icon="pi pi-times" severity="danger" variant="text" (click)="clearCallback($event)" />
-                                            </div>
-                                        </div>
-                                    </ng-template>
-                                </p-datepicker>
-                            </div>
-                    </p-panel>
-            
-                    <p-panel class="shadow-md text-sm w-80" header="Customer">
-                        <div class="flex flex-col gap-2 shadow-sm ">
-                            <p-select 
-                                #customerModel="ngModel"
-                                name="selectedCustomer"
-                                [options]="customers" 
-                                [(ngModel)]="selectedCustomer" 
-                                optionLabel="name" 
-                                [filter]="true" 
+<div class="p-4">
+    <p-panel class="shadow-sm pt-5" [showHeader]="false">
+        <p-toast />
+        <form #dashboardForm="ngForm" (ngSubmit)="onSubmit(dashboardForm)">
+            <div class="flex flex-row flex-wrap justify-start gap-10">
+                <p-panel class="shadow-md w-80 text-sm" header="Data">
+                        <div class="flex flex-col gap-2 shadow-sm">
+                            <p-datepicker 
+                                name="rangeDates"
+                                #dateModel="ngModel"
+                                [(ngModel)]="rangeDates" 
+                                selectionMode="range" 
+                                [showIcon]="true" 
+                                placeholder="Selecione as datas"
+                                dateFormat="dd/mm/yy"
                                 [showClear]="true"
-                                required
+                                [readonlyInput]="true"
+                                [showButtonBar]="true"
+                                pInputMask="99/99/9999"
                                 size="small"
-                                placeholder="Todos os Clientes">
-                                
-                            </p-select>
+                                required>
+
+                                <ng-template #buttonbar let-todayCallback="todayCallback" let-clearCallback="clearCallback">
+                                    <div class="flex justify-end w-full">
+                                        <div class="flex gap-2">
+                                            <p-button size="small" label="Hoje" (click)="todayCallback($event)" variant="outlined" />
+                                            <p-button size="small" icon="pi pi-times" severity="danger" variant="text" (click)="clearCallback($event)" />
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </p-datepicker>
                         </div>
-                    </p-panel>
-                    <div class="flex items-end ">
-                        <button pButton class="text-sm w-20" type="submit"><span pButtonLabel>Enviar</span></button>
+                </p-panel>
+        
+                <p-panel class="shadow-md text-sm w-80" header="Customer">
+                    <div class="flex flex-col gap-2 shadow-sm ">
+                        <p-select 
+                            #customerModel="ngModel"
+                            name="selectedCustomer"
+                            [options]="customers" 
+                            [(ngModel)]="selectedCustomer" 
+                            optionLabel="name" 
+                            [filter]="true" 
+                            [showClear]="true"
+                            required
+                            size="small"
+                            placeholder="Todos os Clientes">
+                            
+                        </p-select>
                     </div>
+                </p-panel>
+                <div class="flex items-end ">
+                    <button pButton class="text-sm w-20" type="submit"><span pButtonLabel>Enviar</span></button>
                 </div>
-            </form>
-
-            <p-divider />
-
-            <div class="grid grid-cols-2 grid-rows-2 gap-4">
-                <p-card class="col-span-1 row-span-1 w-auto shadow-md text-sm pt-5" header="Labels Fails">
-                    <p-chart type="bar" [data]="labelFailData" [options]="basicOptions" [responsive]="true" />
-                </p-card>
-
-                <p-card class="col-span-1 row-span-1 w-auto shadow-md text-sm pt-5" header="Assembly Fails" >
-                    <p-chart type="pie" [data]="labelFailDataPie" [options]="basicOptions" [responsive]="true" />
-                </p-card>
-
-                <p-card class="col-span-1 row-span-2 w-auto shadow-md text-sm pt-5" header="Packout Serials">
-                    <p-table 
-                        #dtPackout
-                        [value]="serialNumberPackoutData" 
-                        [scrollable]="true" 
-                        scrollHeight="400px" 
-                        styleClass="p-datatable-sm p-datatable-striped"
-                        [globalFilterFields]="['serial']">
-
-                        <ng-template pTemplate="caption">
-                            <div class="justify-start items-center p-1">
-                                <span class="flex flex-row gap-2 p-input-icon-left w-full sm:w-80">
-                                    <i class="pi pi-search"></i>
-                                    <input 
-                                        pInputText 
-                                        type="text" 
-                                        (input)="dtPackout.filterGlobal($any($event.target).value, 'contains')" 
-                                        placeholder="Pesquisar serial ou tempo..." 
-                                        class="w-full p-column-filter" />
-                                </span>
-                            </div>
-                        </ng-template>
-                        
-                        <ng-template pTemplate="header">
-                            <tr>
-                                <th pSortableColumn="serial">
-                                    Serial <p-sortIcon field="serial"></p-sortIcon>
-                                </th>
-                            </tr>
-                        </ng-template>
-
-                        <ng-template pTemplate="body" let-item>
-                            <tr>
-                                <td>{{ item.serial }}</td>
-                            </tr>
-                        </ng-template>
-
-                        <ng-template pTemplate="emptymessage">
-                            <tr>
-                                <td style="padding: 1rem; text-align: center;">Nenhum serial disponível.</td>
-                            </tr>
-                        </ng-template>
-                    </p-table>
-                </p-card>
-
-                <p-card class="col-span-1 row-span-2 w-auto shadow-md text-sm pt-5" header="Quarantine Serials">
-                    <p-table 
-                        #dtQuarentine
-                        [value]="quarentineTableData" 
-                        [scrollable]="true" 
-                        scrollHeight="400px" 
-                        styleClass="p-datatable-sm p-datatable-striped"
-                        responsiveLayout="scroll"
-                        [globalFilterFields]="['serial', 'time']">
-                        
-                        <ng-template pTemplate="caption">
-                            <div class="justify-start items-center p-1">
-                                <span class="flex flex-row gap-2 p-input-icon-left w-full sm:w-80">
-                                    <i class="pi pi-search"></i>
-                                    <input 
-                                        pInputText 
-                                        type="text" 
-                                        (input)="dtQuarentine.filterGlobal($any($event.target).value, 'contains')" 
-                                        placeholder="Pesquisar serial ou tempo..." 
-                                        class="w-full p-column-filter" />
-                                </span>
-                            </div>
-                        </ng-template>
-                        <ng-template pTemplate="header">
-                            <tr>
-                                <th pSortableColumn="serial" style="width:60%">
-                                    Serial Number <p-sortIcon field="serial"></p-sortIcon>
-                                </th>
-                                <th pSortableColumn="time" style="width:40%">
-                                    Time Passed <p-sortIcon field="time"></p-sortIcon>
-                                </th>
-                            </tr>
-                        </ng-template>
-
-                        <ng-template pTemplate="body" let-item>
-                            <tr>
-                                <td style="width:60%">
-                                    <span class="font-medium">{{ item.serial }}</span>
-                                </td>
-                                <td style="width:40%">
-                                    <span class="px-2 py-1 rounded bg-orange-100 text-orange-700 border border-orange-200 text-xs font-semibold">
-                                        {{ item.time }}
-                                    </span>
-                                </td>
-                            </tr>
-                        </ng-template>
-
-                        <ng-template pTemplate="emptymessage">
-                            <tr>
-                                <td colspan="2" class="text-center p-4 text-gray-500">
-                                    Nenhum serial em quarentena para o período selecionado.
-                                </td>
-                            </tr>
-                        </ng-template>
-                    </p-table>
-                </p-card>
             </div>
-        </p-panel>   
-    </div>
+        </form>
+
+        <p-divider />
+
+        <div class="grid grid-cols-2 grid-rows-2 gap-4">
+            <p-card class="col-span-1 row-span-1 w-auto shadow-md text-sm pt-5" header="Labels Fails">
+                <p-chart type="bar" [data]="labelFailData" [options]="basicOptions" [responsive]="true" />
+            </p-card>
+
+            <p-card class="col-span-1 row-span-1 w-auto shadow-md text-sm pt-5" header="Labels Fails" >
+                <p-chart type="pie" [data]="labelFailDataPie" [options]="basicOptions" [responsive]="true" />
+            </p-card>
+
+            <p-card class="col-span-1 row-span-2 w-auto shadow-md text-sm pt-5" header="Packout Serials">
+                <p-table 
+                    #dtPackout
+                    [value]="serialNumberPackoutData" 
+                    [scrollable]="true" 
+                    scrollHeight="400px" 
+                    styleClass="p-datatable-sm p-datatable-striped"
+                    [globalFilterFields]="['serial']">
+
+                    <ng-template pTemplate="caption">
+                        <div class="justify-start items-center p-1">
+                            <span class="flex flex-row gap-2 p-input-icon-left w-full sm:w-80">
+                                <i class="pi pi-search"></i>
+                                <input 
+                                    pInputText 
+                                    type="text" 
+                                    (input)="dtPackout.filterGlobal($any($event.target).value, 'contains')" 
+                                    placeholder="Pesquisar serial ou tempo..." 
+                                    class="w-full p-column-filter" />
+                            </span>
+                        </div>
+                    </ng-template>
+                    
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th pSortableColumn="serial">
+                                Serial <p-sortIcon field="serial"></p-sortIcon>
+                            </th>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="body" let-item>
+                        <tr>
+                            <td>{{ item.serial }}</td>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="emptymessage">
+                        <tr>
+                            <td style="padding: 1rem; text-align: center;">Nenhum serial disponível.</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </p-card>
+
+            <p-card class="col-span-1 row-span-2 w-auto shadow-md text-sm pt-5" header="Quarantine Serials">
+                <p-table 
+                    #dtQuarentine
+                    [value]="quarentineTableData" 
+                    [scrollable]="true" 
+                    scrollHeight="400px" 
+                    styleClass="p-datatable-sm p-datatable-striped"
+                    responsiveLayout="scroll"
+                    [globalFilterFields]="['serial', 'time']">
+                    
+                    <ng-template pTemplate="caption">
+                        <div class="justify-start items-center p-1">
+                            <span class="flex flex-row gap-2 p-input-icon-left w-full sm:w-80">
+                                <i class="pi pi-search"></i>
+                                <input 
+                                    pInputText 
+                                    type="text" 
+                                    (input)="dtQuarentine.filterGlobal($any($event.target).value, 'contains')" 
+                                    placeholder="Pesquisar serial ou tempo..." 
+                                    class="w-full p-column-filter" />
+                            </span>
+                        </div>
+                    </ng-template>
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th pSortableColumn="serial" style="width:60%">
+                                Serial Number <p-sortIcon field="serial"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="time" style="width:40%">
+                                Time Passed <p-sortIcon field="time"></p-sortIcon>
+                            </th>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="body" let-item>
+                        <tr>
+                            <td style="width:60%">
+                                <span class="font-medium">{{ item.serial }}</span>
+                            </td>
+                            <td style="width:40%">
+                                <span class="px-2 py-1 rounded bg-orange-100 text-orange-700 border border-orange-200 text-xs font-semibold">
+                                    {{ item.time }}
+                                </span>
+                            </td>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="emptymessage">
+                        <tr>
+                            <td colspan="2" class="text-center p-4 text-gray-500">
+                                Nenhum serial em quarentena para o período selecionado.
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </p-card>
+        </div>
+    </p-panel>   
+</div>
     
   
 
