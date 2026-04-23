@@ -49,7 +49,7 @@ export class Dashboard {
     serialNumberPackoutData: { serial: string }[] = [];
 
     // Quarentine data
-    quarentineTableData: { serial: string, time: string }[] = [];
+    quarentineTableData: { Serial: string, DatePackout: string, Status: string, Message: string }[] = [];
     serial: string[] = [];
     timePassed: string[] = [];
 
@@ -148,11 +148,13 @@ export class Dashboard {
                 this.dateSelected[0],
                 this.dateSelected[1] == undefined ? this.dateSelected[0] : this.dateSelected[1]
             ).subscribe(data => {
-                if (data.serialNumber && data.timePassed) {
+                if (data.serialNumber && data.datePackout && data.Status && data.Message) {
                     this.quarentineTableData = data.serialNumber.map((serial, index) => {
                         return {
-                            serial: serial,
-                            time: data.timePassed[index] 
+                            Serial: serial,
+                            DatePackout: data.datePackout[index],
+                            Status: data.Status[index],
+                            Message: data.Message[index]
                         };
                     });
                 }

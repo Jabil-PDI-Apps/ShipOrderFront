@@ -19,7 +19,9 @@ interface PackoutResponse {
 
 interface QuarentineResponse {
   serialNumber: string[],
-  timePassed: string[]
+  datePackout: string[],
+  Status: string[],
+  Message: string[],
 }
 
 @Injectable({
@@ -100,21 +102,22 @@ export class DashboardService {
         console.log('Raw quarentine API response:', quarentine);
         
         const serials: string[] = [];
-        const timePassed: string[] = [];
-        
+        const datePackout: string[] = [];
+        const Status: string[] = [];
+        const Message: string[] = [];
+
         quarentine.forEach(item => {
           serials.push(item.serialNumber || ''); 
-          
-          // 2. Processa o tempo
-          const timeValue = item.timePassed ? item.timePassed.split(' ')[0] + ' ' + item.timePassed.split(' ')[1] : '';
-          timePassed.push(timeValue);
+          datePackout.push(item.datePackout || '');
+          Status.push(item.status || '');
+          Message.push(item.message || '');
         });
-        
-        console.log('Processed Serials:', serials); 
         
         return {
           serialNumber: serials,
-          timePassed: timePassed
+          datePackout: datePackout,
+          Status: Status,
+          Message: Message
         };
       })
     );
