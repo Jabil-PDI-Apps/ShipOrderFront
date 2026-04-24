@@ -11,8 +11,10 @@ import { Packout } from './dto/Packout';
 interface LabelFailResponse {
   date: string[],
   assemblyNoQty: number[],
-  assemblyNo: string[][]
+  assemblyNo: string[][],
+  serialNumber: string[]
 }
+
 interface PackoutResponse {
   serialNumber: string[]
 }
@@ -74,11 +76,21 @@ export class DashboardService {
         // Mapear as contagens e assembly numbers para todas as datas
         const counts = allDates.map(date => dateCountMap.get(date) || 0);
         const assemblyNumbers = allDates.map(date => dateMap.get(date) || []);
-        
+
+        // Mapear Serial numbers por Assembly No
+        const assemblyNoSerialMap = new Map<string, string[]>();
+        labelFail.forEach(item => {
+          if (!assemblyNoSerialMap.has(item.assemblyNo)) {
+            assemblyNoSerialMap.set(item.assemblyNo, []);
+          }
+          assemblyNoSerialMap.get(item.assemblyNo)!.push(item.serialNumber);
+        });
+
         return {
           date: allDates,
           assemblyNoQty: counts,
-          assemblyNo: assemblyNumbers
+          assemblyNo: assemblyNumbers,
+          serialNumber: Array.from(assemblyNoSerialMap.values()).flat()
         };
       })
     );

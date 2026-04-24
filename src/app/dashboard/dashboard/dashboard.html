@@ -73,9 +73,78 @@
                 <p-chart type="bar" [data]="labelFailData" [options]="basicOptions" [responsive]="true" />
             </p-card>
 
-            <p-card class="col-span-1 row-span-1 w-auto shadow-md text-sm pt-5" header="Labels Fails" >
-                <p-chart type="pie" [data]="labelFailDataPie" [options]="basicOptions" [responsive]="true" />
+            <p-card class="col-span-1 row-span-1 w-auto shadow-md text-sm pt-5">
+                <ng-template pTemplate="header">
+                    <div class="flex justify-between items-center px-5 pt-5">
+                        <span class="text-xl font-bold">Labels Fails Detail</span>
+                        <p-button 
+                            [icon]="showChart ? 'pi pi-table' : 'pi pi-chart-pie'" 
+                            (onClick)="showChart = !showChart"
+                            styleClass="p-button-rounded p-button-text">
+                        </p-button>
+                    </div>
+                </ng-template>
+
+                <div *ngIf="showChart; else tableView">
+                    <p-chart type="pie" [data]="labelFailDataPie" [options]="basicOptions" />
+                </div>
+
+                <ng-template #tableView>
+                    <p-table 
+                        #dtLabelsFails 
+                        [value]="tableRows" 
+                        [columns]="tableColumns"
+                        [globalFilterFields]="globalFilterFields" 
+                        [scrollable]="true" 
+                        scrollHeight="400px" 
+                        styleClass="p-datatable-sm p-datatable-gridlines">
+                        
+                        <ng-template pTemplate="caption">
+                            <div class="flex justify-start items-center p-1">
+                                <span class="p-input-icon-left w-full sm:w-80">
+                                    <i class="pi pi-search"></i>
+                                    <input 
+                                        pInputText 
+                                        type="text" 
+                                        (input)="dtLabelsFails.filterGlobal($any($event.target).value, 'contains')" 
+                                        placeholder="Pesquisar serial ou assembly..." 
+                                        class="w-full p-inputtext-sm" />
+                                </span>
+                            </div>
+                        </ng-template>
+
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th *ngFor="let col of tableColumns" style="min-width: 150px;">
+                                    {{ col }}
+                                </th>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="body" let-rowData>
+                            <tr>
+                                <td *ngFor="let col of tableColumns" style="min-width: 150px;">
+                                    <span [class.text-gray-400]="rowData[col] === '-'">
+                                        {{ rowData[col] }}
+                                    </span>
+                                </td>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td [attr.colspan]="tableColumns.length" class="text-center p-4">
+                                    Nenhum dado encontrado para o filtro.
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </ng-template>
             </p-card>
+
+            <!-- <p-card class="col-span-1 row-span-1 w-auto shadow-md text-sm pt-5" header="Labels Fails" >
+                <p-chart type="pie" [data]="labelFailDataPie" [options]="basicOptions" [responsive]="true" />
+            </p-card> -->
 
             <p-card class="col-span-1 row-span-2 w-auto shadow-md text-sm pt-5" header="Packout Serials">
                 <p-table 

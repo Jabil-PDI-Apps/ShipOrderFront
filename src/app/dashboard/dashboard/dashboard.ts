@@ -24,6 +24,13 @@ export class Dashboard {
     items: MenuItem[] | undefined;
     home: MenuItem | undefined;
 
+    // Tabela Label Fail
+    showChart: boolean = true;
+    tableColumns: string[] = []; 
+    tableRows: any[] = [];
+    globalFilterFields: string[] = [];
+    
+
     // Chart data
     labelFailData: any;
     labelFailDataPie: any;
@@ -44,6 +51,7 @@ export class Dashboard {
     dateLabelFailData: string[] = [];
     dataLabelFailData: number[] = [];
     assemblyNoLabelFailData: string[][] = [];
+
 
     //Packout data
     serialNumberPackoutData: { serial: string }[] = [];
@@ -86,6 +94,7 @@ export class Dashboard {
                 this.dataLabelFailData = data.assemblyNoQty;
                 this.assemblyNoLabelFailData = data.assemblyNo;
 
+                const allSerials = data.serialNumber;
                 const allAssemblyNumbers = this.assemblyNoLabelFailData.flat();
                 const uniqueAssemblyNumbers = Array.from(new Set(allAssemblyNumbers));
                 const assemblyNoCounts = uniqueAssemblyNumbers.map(assembly => 
@@ -94,7 +103,7 @@ export class Dashboard {
                 const datasets = uniqueAssemblyNumbers.map((assembly, index) => {
                     const data = this.assemblyNoLabelFailData.map(dateAssemblies => 
                     dateAssemblies.filter(a => a === assembly).length);
-
+        
                     const colors = ['rgba(249, 115, 22, 0.2)', 'rgba(6, 182, 212, 0.2)', 'rgb(107, 114, 128, 0.2)', 'rgba(139, 92, 246, 0.2)'];
                     const borderColors = ['rgb(249, 115, 22)', 'rgb(6, 182, 212)', 'rgb(107, 114, 128)', 'rgb(139, 92, 246)'];
                     
@@ -106,6 +115,37 @@ export class Dashboard {
                         borderWidth: 1
                     };
                 });
+                
+                // Tabela de Assembly No x Serial Number
+                const mapping: { [key: string]: string[] } = {};
+
+                allAssemblyNumbers.forEach((assy, index) => {
+                    if (!mapping[assy]) mapping[assy] = [];
+                    if (allSerials[index]) {
+                        mapping[assy].push(allSerials[index]);
+                    }
+                });
+
+                
+                allAssemblyNumbers.forEach((assy, index) => {
+                    if (!mapping[assy]) mapping[assy] = [];
+                    if (allSerials[index]) mapping[assy].push(allSerials[index]);
+                });
+
+                this.tableColumns = Object.keys(mapping);
+                this.globalFilterFields = [...this.tableColumns];
+
+                const maxRows = Math.max(...Object.values(mapping).map(arr => arr.length), 0);
+
+                this.tableRows = [];
+                for (let i = 0; i < maxRows; i++) {
+                    let row: any = {};
+                    this.tableColumns.forEach(col => {
+                        row[col] = mapping[col][i] || '-';
+                    });
+                    this.tableRows.push(row);
+                }
+
 
                 this.labelFailData = {
                     labels: this.dateLabelFailData,
@@ -114,7 +154,7 @@ export class Dashboard {
                 };
                 
                 this.labelFailDataPie = {
-                    labels: uniqueAssemblyNumbers,
+                    labels: uniqueAssemblyNumbers ,
                     datasets: [{
                         label: 'Assembly Fails',
                         data: assemblyNoCounts,
